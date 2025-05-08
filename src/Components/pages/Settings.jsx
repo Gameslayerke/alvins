@@ -23,10 +23,10 @@ const UserSettingsPage = () => {
     {
       id: 1,
       title: 'Home Address',
-      name: 'name',
+      name: 'Alvins Munene',
       street1: '123 Main Street',
       street2: 'Apartment 4B',
-      city: 'Your City',
+      city: 'MERU',
       state: 'Ky',
       zip: '10001',
       country: 'Your Country',
@@ -35,14 +35,14 @@ const UserSettingsPage = () => {
     },
     {
       id: 2,
-      title: 'Work Address',
-      name: 'John Doe',
+      title: 'Delivery Address',
+      name: 'Alvins Munene',
       street1: '456 Business Avenue',
       street2: 'Floor 10, Suite 1002',
-      city: 'New York',
-      state: 'NY',
-      zip: '10005',
-      country: 'United States',
+      city: 'NAIROBI',
+      state: 'NR',
+      zip: '60202',
+      country: 'KENYA',
       phone: '+1 (555) 987-6543',
       isDefault: false
     }
@@ -60,12 +60,12 @@ const UserSettingsPage = () => {
       id: 2,
       type: 'MasterCard',
       last4: '5555',
-      expiry: '06/24',
+      expiry: '06/27',
       isDefault: false
     }
   ]);
 
-  const [orders, setOrders] = useState([
+  const [orders,] = useState([
     {
       id: 'ORD-12345',
       date: '2023-05-15',
@@ -94,18 +94,18 @@ const UserSettingsPage = () => {
       id: 1,
       device: 'iPhone 13',
       browser: 'Safari',
-      location: 'New York, NY',
+      location: 'Meru',
       ip: '192.168.1.1',
-      lastActive: '2023-05-20T14:30:00',
+      lastActive: '2025-05-11T14:30:00',
       isCurrent: true
     },
     {
       id: 2,
       device: 'MacBook Pro',
       browser: 'Chrome',
-      location: 'New York, NY',
+      location: 'Westland, KE',
       ip: '192.168.1.2',
-      lastActive: '2023-05-19T09:15:00',
+      lastActive: '2025-05-9T09:15:00',
       isCurrent: false
     }
   ]);
@@ -127,10 +127,10 @@ const UserSettingsPage = () => {
 
   const [preferences, setPreferences] = useState({
     language: 'en',
-    currency: 'USD'
+    currency: 'KSH'
   });
 
-  const [loyalty, setLoyalty] = useState({
+  const [loyalty, ] = useState({
     points: 650,
     tier: 'Silver',
     nextTier: 'Gold',
@@ -470,7 +470,8 @@ const UserSettingsPage = () => {
                     >
                       <FontAwesomeIcon icon={faTrash} /> Remove
                     </button>
-                  </div>
+                  </div>  Line 14:9:  The 'words' array makes the dependencies of useEffect Hook (at line 70) change on every render. Move it inside the useEffect callback. Alternatively, wrap the initialization of 'words' in its own useMemo() Hook  react-hooks/exhaustive-deps
+
                 </div>
               ))}
             </div>
@@ -681,7 +682,7 @@ const UserSettingsPage = () => {
                   />
                   <div className="wishlist-details">
                     <h4>{item.name}</h4>
-                    <p>${item.price.toFixed(2)}</p>
+                    <p>Ksh {item.price.toFixed(2)}</p>
                   </div>
                   <div className="wishlist-actions">
                     <button className="btn btn-primary btn-sm">

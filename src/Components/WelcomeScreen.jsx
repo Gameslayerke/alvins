@@ -1,7 +1,7 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import "../index.css";
+import "../Components/styles/Welcome.css"; 
 
 const WelcomeScreen = () => {
   const navigate = useNavigate();
@@ -11,14 +11,14 @@ const WelcomeScreen = () => {
   const [showSkip, setShowSkip] = useState(false);
   const audioRef = useRef(null);
 
-  const words = [
+  const words = useMemo(() => [
     "SEAMLESS",
     "LIGHTNING FAST",
     "CURATED",
     "SECURE",
     "EFFORTLESS",
     "PERSONALIZED"
-  ];
+  ], []);
 
   // Play subtle typing sound
   useEffect(() => {
@@ -42,7 +42,7 @@ const WelcomeScreen = () => {
   useEffect(() => {
     const typingEffect = () => {
       const currentWord = words[currentIndex];
-      
+
       if (isDeleting) {
         setTypingText(currentWord.substring(0, typingText.length - 1));
         if (typingText.length === 0) {
@@ -72,8 +72,8 @@ const WelcomeScreen = () => {
   return (
     <div className="welcome-screen">
       <div className="particles-background"></div>
-      
-      <motion.div 
+
+      <motion.div
         className="welcome-content"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -95,11 +95,11 @@ const WelcomeScreen = () => {
         <div className="welcome-message">
           <h2>
             ELEVATE YOUR SHOPPING EXPERIENCE
-            <br />
+            <br className="mobile-break" />
             WITH <span className="typing-text">{typingText}</span>
             <span className="cursor">|</span> DELIVERY
           </h2>
-          
+
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}

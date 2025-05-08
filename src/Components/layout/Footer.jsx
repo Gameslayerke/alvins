@@ -10,10 +10,7 @@ import {
   FaCcApplePay,
   FaCcAmex,
   FaGooglePay,
-  FaMapMarkerAlt,
-  FaPhoneAlt,
-  FaEnvelope,
-  FaClock
+  
 } from 'react-icons/fa';
 import { SiShopify } from 'react-icons/si';
 import '../styles/Footer.css';
@@ -46,10 +43,10 @@ const Footer = () => {
           </p>
           
           <div className="social-icons">
-            <a href="#" aria-label="Facebook"><FaFacebook /></a>
-            <a href="#" aria-label="Twitter"><FaTwitter /></a>
-            <a href="#" aria-label="Instagram"><FaInstagram /></a>
-            <a href="#" aria-label="LinkedIn"><FaLinkedin /></a>
+            <a href="/help" aria-label="Facebook"><FaFacebook /></a>
+            <a href="/help" aria-label="Twitter"><FaTwitter /></a>
+            <a href="/help" aria-label="Instagram"><FaInstagram /></a>
+            <a href="/help" aria-label="LinkedIn"><FaLinkedin /></a>
           </div>
         </div>
 
@@ -108,11 +105,11 @@ const Footer = () => {
           <div className="copyright">
             <p>&copy; {currentYear} QuickCart. All rights reserved.</p>
             <div className="legal-links">
-              <a href="#">Privacy Policy</a>
+              <a href="/terms">Privacy Policy</a>
               <span> | </span>
-              <a href="#">Terms of Use</a>
+              <a href="/terms">Terms of Use</a>
               <span> | </span>
-              <a href="#">Cookie Policy</a>
+              <a href="/terms">Cookie Policy</a>
             </div>
           </div>
         </div>

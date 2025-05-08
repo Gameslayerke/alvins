@@ -19,6 +19,7 @@ import Loader from './Components/layout/Loader';
 import CouponsPage from './Components/pages/Coupons';
 import UserSettingsPage from './Components/pages/Settings';
 
+
 // Layout config
 const LAYOUT_CONFIG = {
   hiddenPaths: ['/', '/login', '/register'],

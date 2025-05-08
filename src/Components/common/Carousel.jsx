@@ -69,7 +69,7 @@ const Carousel = () => {
             alt="Product"
             className="side-image"
             onError={(e) => {
-              e.target.src = '1.gif';
+              e.target.src = '/public/images/1.gif';
               e.target.alt = 'Fallback content';
             }}
           />
