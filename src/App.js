@@ -42,8 +42,6 @@ const LAYOUT_CONFIG = {
     { path: '/settings', element: <UserSettingsPage /> },
 
 
-
-
     // New routes with placeholder divs
     { 
       path: '/orders', 

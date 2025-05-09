@@ -112,7 +112,7 @@ const Navbar = () => {
                   <ul className="dropdown-menu active">
                     {categories.map(category => (
                       <li key={category.category_id}>
-                        <Link to={`/category/${category.category_id}`}>
+                        <Link to={`https://alvins.pythonanywhere.com/category/${category.category_id}`}>
                           {category.category_name}
                         </Link>
                       </li>

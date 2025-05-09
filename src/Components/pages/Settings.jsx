@@ -743,6 +743,8 @@ const UserSettingsPage = () => {
                   <option value="EUR">Euro (€)</option>
                   <option value="GBP">British Pound (£)</option>
                   <option value="JPY">Japanese Yen (¥)</option>
+                  <option value="KSH">Kenyan Shillings (Ksh)</option>
+
                 </select>
               </div>
               
