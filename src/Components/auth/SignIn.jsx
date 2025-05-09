@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext'; // Use the useAuth hook
+import { useAuth } from '../contexts/AuthContext'; // Ensure this context is correctly implemented and provides login and user
+import ReCAPTCHA from 'react-google-recaptcha';
 import '../styles/AuthForms.css';
 
 const SignIn = () => {
@@ -8,8 +9,9 @@ const SignIn = () => {
     email: '',
     password: '',
   });
+  const [captchaToken, setCaptchaToken] = useState(null);
   const [error, setError] = useState('');
-  const { login, user } = useAuth(); // Use useAuth to access login and user
+  const { login, user } = useAuth();
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -20,15 +22,23 @@ const SignIn = () => {
     }));
   };
 
+  const handleCaptchaChange = (token) => {
+    setCaptchaToken(token);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
 
+    if (!captchaToken) {
+      setError('Please complete the CAPTCHA before signing in.');
+      return;
+    }
+
     try {
-      const result = await login(formData);
+      const result = await login({ ...formData, captchaToken });
       if (result.success) {
-        navigate(user?.role === 'admin' ? '/admin' : '/');
+        navigate(user?.role === 'admin' ? '/admin' : '/', { replace: true }); // Ensure proper navigation
       } else {
         setError(result.error || 'Login failed. Please try again.');
       }
@@ -73,6 +83,13 @@ const SignIn = () => {
               required
               className="form-control"
               placeholder="Enter your password"
+            />
+          </div>
+
+          <div className="form-group">
+            <ReCAPTCHA
+              sitekey="6Lc11TMrAAAAAKZfvr1henD3Ihrqd86fGVfI1NhW" // Updated with the provided site key
+              onChange={handleCaptchaChange}
             />
           </div>
 
