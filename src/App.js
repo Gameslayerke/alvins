@@ -18,7 +18,7 @@ import FAQPage from './Components/pages/FAQS';
 import Loader from './Components/layout/Loader';
 import CouponsPage from './Components/pages/Coupons';
 import UserSettingsPage from './Components/pages/Settings';
-
+import { Analytics } from '@vercel/analytics/react'; // ✅ Import Analytics
 
 // Layout config
 const LAYOUT_CONFIG = {
@@ -40,7 +40,6 @@ const LAYOUT_CONFIG = {
     { path: '/loader', element: <Loader /> },
     { path: '/coupons', element: <CouponsPage /> },
     { path: '/settings', element: <UserSettingsPage /> },
-
 
     // New routes with placeholder divs
     { 
@@ -93,6 +92,7 @@ function App() {
     <Router>
       <AuthProvider>
         <Layout />
+        <Analytics /> {/* ✅ Add Analytics here */}
       </AuthProvider>
     </Router>
   );
