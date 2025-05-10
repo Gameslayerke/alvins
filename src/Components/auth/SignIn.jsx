@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext'; // Ensure this context is correctly implemented and provides login and user
+import { useAuth } from '../contexts/AuthContext';
 import ReCAPTCHA from 'react-google-recaptcha';
 import '../styles/AuthForms.css';
 
 const SignIn = () => {
   const [formData, setFormData] = useState({
-    email: '',
+    emailOrUsername: '',
     password: '',
   });
   const [captchaToken, setCaptchaToken] = useState(null);
@@ -16,7 +16,7 @@ const SignIn = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       [name]: value
     }));
@@ -35,10 +35,22 @@ const SignIn = () => {
       return;
     }
 
+    const payload = {
+      password: formData.password,
+      captchaToken,
+    };
+
+    // determine if input is email or username
+    if (formData.emailOrUsername.includes('@')) {
+      payload.email = formData.emailOrUsername;
+    } else {
+      payload.username = formData.emailOrUsername;
+    }
+
     try {
-      const result = await login({ ...formData, captchaToken });
+      const result = await login(payload);
       if (result.success) {
-        navigate(user?.role === 'admin' ? '/admin' : '/', { replace: true }); // Ensure proper navigation
+        navigate(user?.role === 'admin' ? '/admin' : '/', { replace: true });
       } else {
         setError(result.error || 'Login failed. Please try again.');
       }
@@ -59,16 +71,16 @@ const SignIn = () => {
 
         <form className="auth-form" onSubmit={handleSubmit}>
           <div className="form-group">
-            <label htmlFor="email">Email Address</label>
+            <label htmlFor="emailOrUsername">Email or Username</label>
             <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
+              type="text"
+              id="emailOrUsername"
+              name="emailOrUsername"
+              value={formData.emailOrUsername}
               onChange={handleChange}
               required
               className="form-control"
-              placeholder="Enter your email"
+              placeholder="Enter your email or username"
             />
           </div>
 
@@ -88,7 +100,7 @@ const SignIn = () => {
 
           <div className="form-group">
             <ReCAPTCHA
-              sitekey="6Lc11TMrAAAAAKZfvr1henD3Ihrqd86fGVfI1NhW" // Updated with the provided site key
+              sitekey="6Lc11TMrAAAAAKZfvr1henD3Ihrqd86fGVfI1NhW"
               onChange={handleCaptchaChange}
             />
           </div>
@@ -101,12 +113,16 @@ const SignIn = () => {
             <a href="/forgotpassword" className="forgot-password">Forgot password?</a>
           </div>
 
-          <button type="submit" className="auth-button">
+          <button
+            type="submit"
+            className="auth-button"
+            disabled={!captchaToken}
+          >
             Sign In
           </button>
 
           <div className="auth-footer">
-            Don't have an account? <a href="/register">Sign up</a>
+            Don&apos;t have an account? <a href="/register">Sign up</a>
           </div>
         </form>
       </div>

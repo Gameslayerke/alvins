@@ -90,26 +90,20 @@ body {
   cursor: pointer;
 }
 .dropdown-menu {
+  display: none;
   position: absolute;
+  background-color: white;
+  z-index: 1000;
   top: 100%;
   left: 0;
-  background: white;
-  border-radius: 0.5rem;
-  box-shadow: var(--shadow-md);
-  width: 200px;
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(10px);
-  transition: var(--transition);
-  z-index: 100;
-  padding: 0.5rem 0;
-  list-style: none;
+  padding: 10px;
+  border: 1px solid #ddd;
 }
+
 .dropdown-menu.active {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(0);
+  display: block;
 }
+
 .dropdown-menu li {
   padding: 0.5rem 1rem;
 }

@@ -64,6 +64,10 @@ const HelpPage = () => {
     )
     .slice(0, 4);
 
+  const handleCallNow = () => {
+    window.location.href = "tel:+254110447217";
+  };
+
   return (
     <div className="help-container">
       <header className="help-header">
@@ -149,9 +153,9 @@ const HelpPage = () => {
               <h3>Live Chat</h3>
               <p>Get instant help from our support agents</p>
               <p className="availability">Available 24/7</p>
-              <button className="contact-button">
+              <a href="#" className="contact-button" onClick={(e) => e.preventDefault()}>
                 Start Chat Now
-              </button>
+              </a>
             </div>
             
             <div className="contact-card">
@@ -161,9 +165,12 @@ const HelpPage = () => {
               <h3>Email Us</h3>
               <p>Send us a message and we'll respond promptly</p>
               <p className="availability">Response within 24 hours</p>
-              <button className="contact-button">
+              <a 
+                href="addictb729@gmail.com" 
+                className="contact-button"
+              >
                 Send Email
-              </button>
+              </a>
             </div>
             
             <div className="contact-card">
@@ -176,7 +183,7 @@ const HelpPage = () => {
                 <strong>+254 110 447 217</strong><br />
                 Mon-Fri, 9am-5pm EAT
               </p>
-              <button className="contact-button">
+              <button className="contact-button" onClick={handleCallNow}>
                 Call Now
               </button>
             </div>
