@@ -4,6 +4,9 @@ import { useAuth } from '../contexts/AuthContext';
 import ReCAPTCHA from 'react-google-recaptcha';
 import '../styles/AuthForms.css';
 
+// Your reCAPTCHA Site Key
+const RECAPTCHA_SITE_KEY = '6Lc11TMrAAAAAKZfvr1henD3Ihrqd86fGVfI1NhW';
+
 const SignIn = () => {
   const [formData, setFormData] = useState({
     emailOrUsername: '',
@@ -11,6 +14,7 @@ const SignIn = () => {
   });
   const [captchaToken, setCaptchaToken] = useState(null);
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false); // Add loading state
   const { login, user } = useAuth();
   const navigate = useNavigate();
 
@@ -29,9 +33,11 @@ const SignIn = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    setLoading(true); // Set loading to true when the form is submitted
 
     if (!captchaToken) {
       setError('Please complete the CAPTCHA before signing in.');
+      setLoading(false);
       return;
     }
 
@@ -45,8 +51,12 @@ const SignIn = () => {
       payload.email = formData.emailOrUsername;
     } else {
       payload.username = formData.emailOrUsername;
+      if (typeof login !== 'function') {
+        setError('Login function is not available. Please check your AuthContext.');
+        setLoading(false);
+        return;
+      }
     }
-
     try {
       const result = await login(payload);
       if (result.success) {
@@ -56,6 +66,8 @@ const SignIn = () => {
       }
     } catch (err) {
       setError('An unexpected error occurred. Please try again.');
+    } finally {
+      setLoading(false); // Set loading back to false after the operation completes (success or failure)
     }
   };
 
@@ -93,14 +105,13 @@ const SignIn = () => {
               value={formData.password}
               onChange={handleChange}
               required
-              className="form-control"
               placeholder="Enter your password"
             />
           </div>
 
           <div className="form-group">
             <ReCAPTCHA
-              sitekey="6Lc11TMrAAAAAKZfvr1henD3Ihrqd86fGVfI1NhW"
+              sitekey={RECAPTCHA_SITE_KEY}
               onChange={handleCaptchaChange}
             />
           </div>
@@ -116,9 +127,9 @@ const SignIn = () => {
           <button
             type="submit"
             className="auth-button"
-            disabled={!captchaToken}
+            disabled={!captchaToken || loading} // Disable button if CAPTCHA is not complete or during loading
           >
-            Sign In
+            {loading ? 'Signing In...' : 'Sign In'}
           </button>
 
           <div className="auth-footer">
