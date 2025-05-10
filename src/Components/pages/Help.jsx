@@ -153,7 +153,7 @@ const HelpPage = () => {
               <h3>Live Chat</h3>
               <p>Get instant help from our support agents</p>
               <p className="availability">Available 24/7</p>
-              <a href="#" className="contact-button" onClick={(e) => e.preventDefault()}>
+              <a href="/chatbot" className="contact-button" onClick={(e) => e.preventDefault()}>
                 Start Chat Now
               </a>
             </div>

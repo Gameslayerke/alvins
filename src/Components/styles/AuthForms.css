@@ -381,3 +381,103 @@
   width: 100%;
   background: #28a745;
 }
+
+/* Main Sign In Button */
+.auth-button {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 15px 0;
+  background-color: #4a6bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.auth-button:hover {
+  background-color: #3a56d4;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.auth-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.auth-button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Social Auth Buttons Container */
+.social-auth-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 20px 0;
+}
+
+/* Common Social Button Styles */
+.google-signin-button,
+.facebook-signin-button {
+  width: 100%;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border: 1px solid #e0e0e0;
+  background-color: white;
+}
+
+.google-signin-button:hover,
+.facebook-signin-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.google-signin-button:active,
+.facebook-signin-button:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+.google-signin-button:disabled,
+.facebook-signin-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Google Button Specific Styles */
+.google-signin-button {
+  color: #5f6368;
+}
+
+.google-signin-button:hover {
+  background-color: #f8f9fa;
+  border-color: #d2d6dc;
+}
+
+/* Facebook Button Specific Styles */
+.facebook-signin-button {
+  color: #1877f2;
+}
+
+.facebook-signin-button:hover {
+  background-color: #f0f4ff;
+  border-color: #c6d4ff;
+}

@@ -1,52 +1,37 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import ReCAPTCHA from 'react-google-recaptcha';
 import '../styles/AuthForms.css';
-
-// Your reCAPTCHA Site Key
-const RECAPTCHA_SITE_KEY = '6Lc11TMrAAAAAKZfvr1henD3Ihrqd86fGVfI1NhW';
 
 const SignIn = () => {
   const [formData, setFormData] = useState({
     emailOrUsername: '',
     password: '',
+    rememberMe: false,
   });
-  const [captchaToken, setCaptchaToken] = useState(null);
   const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false); // Add loading state
+  const [loading, setLoading] = useState(false);
   const { login, user } = useAuth();
   const navigate = useNavigate();
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, type, checked } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: type === 'checkbox' ? checked : value,
     }));
-  };
-
-  const handleCaptchaChange = (token) => {
-    setCaptchaToken(token);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    setLoading(true); // Set loading to true when the form is submitted
-
-    if (!captchaToken) {
-      setError('Please complete the CAPTCHA before signing in.');
-      setLoading(false);
-      return;
-    }
+    setLoading(true);
 
     const payload = {
       password: formData.password,
-      captchaToken,
+      rememberMe: formData.rememberMe,
     };
 
-    // determine if input is email or username
     if (formData.emailOrUsername.includes('@')) {
       payload.email = formData.emailOrUsername;
     } else {
@@ -67,8 +52,18 @@ const SignIn = () => {
     } catch (err) {
       setError('An unexpected error occurred. Please try again.');
     } finally {
-      setLoading(false); // Set loading back to false after the operation completes (success or failure)
+      setLoading(false);
     }
+  };
+
+  const handleGoogleSignInClick = () => {
+    console.log('Google Sign-in button clicked');
+    setError('Google Sign-in functionality not yet implemented.');
+  };
+
+  const handleFacebookSignInClick = () => {
+    console.log('Facebook Sign-in button clicked');
+    setError('Facebook Sign-in functionality not yet implemented.');
   };
 
   return (
@@ -109,17 +104,16 @@ const SignIn = () => {
             />
           </div>
 
-          <div className="form-group">
-            <ReCAPTCHA
-              sitekey={RECAPTCHA_SITE_KEY}
-              onChange={handleCaptchaChange}
-            />
-          </div>
-
           <div className="form-options">
             <div className="remember-me">
-              <input type="checkbox" id="remember" />
-              <label htmlFor="remember">Remember me</label>
+              <input
+                type="checkbox"
+                id="rememberMe"
+                name="rememberMe"
+                checked={formData.rememberMe}
+                onChange={handleChange}
+              />
+              <label htmlFor="rememberMe">Remember me</label>
             </div>
             <a href="/forgotpassword" className="forgot-password">Forgot password?</a>
           </div>
@@ -127,10 +121,37 @@ const SignIn = () => {
           <button
             type="submit"
             className="auth-button"
-            disabled={!captchaToken || loading} // Disable button if CAPTCHA is not complete or during loading
+            disabled={loading}
           >
             {loading ? 'Signing In...' : 'Sign In'}
           </button>
+
+          <div className="social-auth-buttons">
+            <button
+              type="button"
+              className="google-signin-button"
+              onClick={handleGoogleSignInClick}
+              disabled={loading}
+            >
+              <img
+                src="https://img.icons8.com/color/16/000000/google-logo.png"
+                alt="Google logo"
+              />
+              Sign in with Google
+            </button>
+            <button
+              type="button"
+              className="facebook-signin-button"
+              onClick={handleFacebookSignInClick}
+              disabled={loading}
+            >
+              <img
+                src="https://img.icons8.com/color/16/000000/facebook-new.png"
+                alt="Facebook logo"
+              />
+              Sign in with Facebook
+            </button>
+          </div>
 
           <div className="auth-footer">
             Don&apos;t have an account? <a href="/register">Sign up</a>
