@@ -3,7 +3,6 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import { Card, Badge, Button, Spinner, Alert, Form } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-// import './ProductOfferCard.css';
 
 const ProductOfferCard = () => {
   const { productId } = useParams();
@@ -21,11 +20,21 @@ const ProductOfferCard = () => {
       try {
         setLoading(true);
         const response = await axios.get(
-          `https://alvins.pythonanywhere.com/api/getOfferProduct/${productId}`
+          `https://alvins.pythonanywhere.com/api/getOfferProducts`
         );
         
-        if (response.data && response.data.product) {
-          setProduct(response.data.product);
+        // Find the specific product from the offers array
+        const foundProduct = response.data.offers.find(
+          offer => offer.id.toString() === productId
+        );
+
+        if (foundProduct) {
+          setProduct({
+            ...foundProduct,
+            discounted_price: foundProduct.discounted_price || foundProduct.original_price,
+            discount_percentage: foundProduct.discount_percentage || 0,
+            end_date: foundProduct.end_date || new Date().toISOString()
+          });
         } else {
           throw new Error('Product not found');
         }
@@ -69,7 +78,7 @@ const ProductOfferCard = () => {
 
     try {
       const formData = new URLSearchParams();
-      formData.append("amount", product.original_price);
+      formData.append("amount", product.discounted_price); // Use discounted price for payment
       formData.append("phone", phone);
 
       const response = await axios.post(
@@ -92,22 +101,26 @@ const ProductOfferCard = () => {
 
   if (loading) {
     return (
-      <div className="loading-container">
+      <div className="d-flex flex-column align-items-center justify-content-center vh-100">
         <Spinner animation="border" role="status">
           <span className="visually-hidden">Loading...</span>
         </Spinner>
-        <p>Loading product details...</p>
+        <p className="mt-3">Loading product details...</p>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="error-container">
-        <Alert variant="danger">{error}</Alert>
-        <Button variant="primary" onClick={() => navigate("/")}>
-          Back to Home
-        </Button>
+      <div className="container mt-5">
+        <Alert variant="danger" className="text-center">
+          {error}
+          <div className="mt-3">
+            <Button variant="primary" onClick={() => navigate("/offers")}>
+              Back to Offers
+            </Button>
+          </div>
+        </Alert>
       </div>
     );
   }
@@ -117,64 +130,93 @@ const ProductOfferCard = () => {
   }
 
   return (
-    <div className="product-offer-container">
-      <Card className="product-offer-card">
+    <div className="container py-5">
+      <Card className="shadow">
         <div className="row g-0">
           {/* Product Image Section */}
           <div className="col-md-6">
             <Card.Img 
               variant="top" 
-              src={product.image_url} 
+              src={product.image_url || "/placeholder-product.jpg"} 
               alt={product.title}
-              className="product-image"
+              className="img-fluid rounded-start"
+              style={{ height: "100%", objectFit: "cover" }}
+              onError={(e) => {
+                e.target.src = "/placeholder-product.jpg";
+              }}
             />
-            <Badge bg="danger" className="discount-badge">
-              {Math.round(product.discount_percentage)}% OFF
-            </Badge>
+            {product.discount_percentage > 0 && (
+              <Badge bg="danger" className="position-absolute top-0 start-0 m-3 fs-5">
+                {Math.round(product.discount_percentage)}% OFF
+              </Badge>
+            )}
           </div>
 
           {/* Product Details Section */}
           <div className="col-md-6">
-            <Card.Body className="product-details">
-              <Card.Title className="product-title">{product.title}</Card.Title>
-              <Card.Text className="product-description">{product.description}</Card.Text>
+            <Card.Body className="h-100 d-flex flex-column p-4">
+              <Card.Title className="mb-3 fs-2">{product.title}</Card.Title>
+              <Card.Text className="mb-4 text-muted">{product.description}</Card.Text>
               
-              <div className="price-section mb-3">
-                <h4 className="discounted-price">KSh {product.discounted_price}</h4>
-                <span className="original-price">KSh {product.original_price}</span>
+              <div className="price-section mb-4">
+                <h3 className="text-primary fw-bold">
+                  KSh {product.discounted_price?.toLocaleString()}
+                </h3>
+                {product.discount_percentage > 0 && (
+                  <span className="text-decoration-line-through text-muted ms-2 fs-5">
+                    KSh {product.original_price?.toLocaleString()}
+                  </span>
+                )}
+              </div>
+
+              <div className="mb-4">
+                <Badge bg="info" className="me-2 p-2">
+                  Stock: {product.stock_quantity}
+                </Badge>
+                <Badge bg="warning" text="dark" className="p-2">
+                  Offer ends: {new Date(product.end_date).toLocaleDateString()}
+                </Badge>
               </div>
 
               {/* Payment Section */}
-              <div className="payment-section">
+              <div className="payment-section mt-auto">
                 {!localStorage.getItem("user_id") ? (
-                  <Alert variant="warning" className="login-alert">
-                    You must be <Link to="/signin" state={{ from: "product-offer", productId }}>logged in</Link> to proceed with payment.
+                  <Alert variant="warning" className="text-center">
+                    You must be <Link to="/signin" state={{ from: "product-offer", productId }}>logged in</Link> to purchase.
                   </Alert>
                 ) : (
                   <>
                     <Form.Group className="mb-3">
-                      <Form.Label>Enter your phone number to pay via M-Pesa:</Form.Label>
+                      <Form.Label>M-Pesa Payment</Form.Label>
                       <Form.Control
                         type="text"
                         placeholder="2547XXXXXXXX"
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
-                        className="phone-input"
+                        className="py-2"
                       />
+                      <Form.Text className="text-muted">
+                        Enter your Safaricom phone number
+                      </Form.Text>
                     </Form.Group>
 
                     {paymentError && <Alert variant="danger">{paymentError}</Alert>}
-                    {paymentSuccess && <Alert variant="success">Payment initiated! Check your phone.</Alert>}
+                    {paymentSuccess && (
+                      <Alert variant="success">
+                        Payment initiated! Check your phone for M-Pesa prompt.
+                      </Alert>
+                    )}
                   </>
                 )}
               </div>
 
-              <div className="action-buttons d-flex gap-2">
+              <div className="d-flex gap-3 mt-4">
                 <Button
                   variant="primary"
+                  size="lg"
                   onClick={handleBuyNow}
                   disabled={paymentLoading || !localStorage.getItem("user_id")}
-                  className="buy-now-btn"
+                  className="flex-grow-1 py-2"
                 >
                   {paymentLoading ? (
                     <>
@@ -194,11 +236,12 @@ const ProductOfferCard = () => {
                 </Button>
 
                 <Button 
-                  variant="outline-secondary" 
-                  onClick={() => navigate("/")}
-                  className="back-btn"
+                  variant="outline-secondary"
+                  size="lg"
+                  onClick={() => navigate("/offers")}
+                  className="py-2"
                 >
-                  Back to Home
+                  Back to Offers
                 </Button>
               </div>
             </Card.Body>

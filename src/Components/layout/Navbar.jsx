@@ -122,7 +122,7 @@ const Navbar = () => {
                   </ul>
                 )}
               </li>
-              <li><Link to="/deals">Deals</Link></li>
+              <li><Link to="/offers">Deals</Link></li>
               <li><Link to="/Help">Help</Link></li>
             </ul>
 

@@ -28,7 +28,7 @@ const LAYOUT_CONFIG = {
     { path: '/home', element: <HomePage /> },
     { path: '/login', element: <SignIn /> },
     { path: '/register', element: <SignUp /> },
-    { path: '/deals', element: <Offer /> },
+    { path: '/offers', element: <Offer /> },
     { path: '/deals/:offerId', element: <ProductOfferCard /> },
     { path: '/products/:productId', element: <ProductCard /> },
     { path: '/category/:categoryId', element: <HomePage /> },
